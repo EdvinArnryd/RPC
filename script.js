@@ -1,57 +1,90 @@
 let humanScore = 0;
 let computerScore = 0;
 
+const winnerText = document.querySelector("#winnerText");
+
+const humanScoreTxt = document.querySelector("#humanScore");
+
+const computerScoreTxt = document.querySelector("#computerScore");
+
+const computerChoiceTxt = document.querySelector("#computerChoice");
+
 let getComputerChoice = () => {
     let random = Math.random();
 
     let rand = random * (4 - 1) + 1;
 
-    return Math.floor(rand);
-}
+    let res = Math.floor(rand);
 
-let getHumanChoice = () => {
-    let enteredValue = prompt("Enter your choice:");
-
-    return parseInt(enteredValue);
-}
-
-let decideChoice = (user, val) => {
-    let returner = 0;
-    switch(val)
+    switch(res)
     {
         case 1:
-            console.log(user + " picked Rock");
-            returner = "Rock";
+            res = "rock";
             break;
         case 2:
-            console.log(user + " picked Paper");
-            returner = "Paper";
+            res = "paper";
             break;
         case 3:
-            console.log(user + " picked Scissors");
-            returner = "Scissors";
+            res = "scissor";
             break;
         default:
             break;
     }
+    return res;
+}
 
-    return returner;
+let decideChoice = (user, val) => {
+    let res = 0;
+    switch(val)
+    {
+        case "rock":
+            computerChoiceTxt.textContent = user + " picked Rock";
+            res = "Rock";
+            break;
+        case "paper":
+            computerChoiceTxt.textContent = user + " picked Paper";
+            res = "Paper";
+            break;
+        case "scissor":
+            computerChoiceTxt.textContent = user + " picked Scissors";
+            res = "Scissors";
+            break;
+        default:
+            break;
+    }
+    return res;
 }
 
 let humanWin = () => {
     humanScore++;
-    console.log("Human wins.");
+    humanScoreTxt.textContent = humanScore;
+    winnerText.textContent = "Human wins round.";
+
+    if(humanScore >= 5)
+    {
+        decideWinner();
+    }
 }
 
 let computerWin = () => {
     computerScore++;
-    console.log("Computer wins.");
+    computerScoreTxt.textContent = computerScore;
+    winnerText.textContent = "Computer wins round.";
+
+    if(computerScore >= 5)
+    {
+        decideWinner();
+    }
 }
 
-let playRound = (human, computer) => {
+function playRound(event) {
+    let target = event.target;
+
+    let human = decideChoice("Human", target.id)
+    let computer = decideChoice("Computer", getComputerChoice());
     if(human === computer)
     {
-        console.log("It's a tie! AAA");
+        winnerText.textContent = "It's a tie!";
         return;
     }
     if(human == "Rock")
@@ -88,55 +121,25 @@ let playRound = (human, computer) => {
     }
 }
 
-let decideWinner = () => {
-    console.log(" ");
-    console.log(" ");
-    console.log("Game Over.");
-    console.log(" ");
-    console.log(" ");
-    console.log("Human score: " + humanScore);
-    console.log("Computer score: " + computerScore);
+function decideWinner() {
     if(humanScore == computerScore)
     {
-        console.log("It's a tie! No one wins.");
+        winnerText.textContent = "It is a tie, no one wins.";
     }
     else if(humanScore >= computerScore)
     {
-        console.log("Human wins!");
+        winnerText.textContent = "Human wins the game!";
     }
     else
     {
-        console.log("Computer wins!");
+        winnerText.textContent = "Computer wins the game!";
     }
 }
 
-console.log("Welcome to the Game!");
-console.log("     Start      ");
-console.log(" ");
+const rockBtn = document.querySelector("#rock");
+const paperBtn = document.querySelector("#paper");
+const scissorBtn = document.querySelector("#scissor");
 
-let humanResult = decideChoice("Human", getHumanChoice());
-let computerResult = decideChoice("Computer", getComputerChoice());
-
-playRound(humanResult, computerResult);
-
-humanResult = decideChoice("Human", getHumanChoice());
-computerResult = decideChoice("Computer", getComputerChoice());
-
-playRound(humanResult, computerResult);
-
-humanResult = decideChoice("Human", getHumanChoice());
-computerResult = decideChoice("Computer", getComputerChoice());
-
-playRound(humanResult, computerResult);
-
-humanResult = decideChoice("Human", getHumanChoice());
-computerResult = decideChoice("Computer", getComputerChoice());
-
-playRound(humanResult, computerResult);
-
-humanResult = decideChoice("Human", getHumanChoice());
-computerResult = decideChoice("Computer", getComputerChoice());
-
-playRound(humanResult, computerResult);
-
-decideWinner();
+rockBtn.addEventListener("click", playRound);
+paperBtn.addEventListener("click", playRound);
+scissorBtn.addEventListener("click", playRound);
